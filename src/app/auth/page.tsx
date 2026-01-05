@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabaseBrowser } from "@/lib/supabase/client";
+import { getSiteURL } from "@/lib/site-url";
 
 type Mode = "login" | "signup" | "magic" | "forgot";
 
@@ -21,6 +22,8 @@ export default function AuthPage() {
   const [msg, setMsg] = useState<string>("");
   const [error, setError] = useState<string>("");
 
+  const origin = getSiteURL();
+
   // اگر لاگین است، مستقیم برو tree
   useEffect(() => {
     (async () => {
@@ -28,9 +31,6 @@ export default function AuthPage() {
       if (data.session) router.replace("/tree");
     })();
   }, [router, supabase]);
-
-  const origin =
-    typeof window !== "undefined" ? window.location.origin : "http://localhost:3000";
 
   async function ensureProfile() {
     // این بخش اختیاری است: اگر جدول profiles داشتی، یک ردیف اولیه می‌سازد/آپدیت می‌کند.
